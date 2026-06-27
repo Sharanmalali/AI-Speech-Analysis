@@ -1,0 +1,63 @@
+[project]
+name = "ablepro-backend"
+version = "1.0.0"
+description = "AblePro Solutions — AI-powered multi-speaker mental health audio analytics platform (backend)"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "AblePro Solutions" }]
+license = { text = "Proprietary" }
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+# ---------------------------------------------------------------------------
+# Ruff — linting + import sorting
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "C4", "SIM", "TID", "N"]
+ignore = ["B008", "N818"]  # B008: FastAPI Depends() defaults; N818: exception naming
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+# ---------------------------------------------------------------------------
+# Black — formatting
+# ---------------------------------------------------------------------------
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+# ---------------------------------------------------------------------------
+# mypy — static typing
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "unit: fast isolated unit tests",
+    "integration: tests touching external systems (db, redis)",
+    "ml: tests that load ML model artifacts",
+]

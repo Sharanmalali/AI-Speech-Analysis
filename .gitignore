@@ -1,0 +1,59 @@
+# ===========================================================================
+# AblePro Solutions — root .gitignore
+# ===========================================================================
+
+# --- Secrets / environment -------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# --- Local databases / storage ---------------------------------------------
+*.sqlite3
+*.db
+backend/ablepro_dev.db
+backend/storage/
+
+# --- ML / model caches (keep the provided *.pkl in /models) ----------------
+.cache/
+*.ckpt
+*.pt
+torch_cache/
+huggingface/
+
+# --- Node / Next.js --------------------------------------------------------
+node_modules/
+.next/
+out/
+.turbo/
+dist/
+build/
+*.tsbuildinfo
+.pnp.*
+.yarn/
+
+# --- IDE / OS ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# --- Docker -----------------------------------------------------------------
+docker/data/

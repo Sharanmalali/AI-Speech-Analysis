@@ -1,0 +1,114 @@
+# =============================================================================
+# AblePro Solutions — Production Docker Compose stack
+#
+#   nginx  ->  frontend (Next.js) + backend (FastAPI)
+#   backend / worker share one image; worker runs Celery
+#   redis  ->  broker + result backend + rate-limit store
+#
+# Usage:
+#   cp backend/.env.example backend/.env   # fill in secrets
+#   docker compose up -d --build
+# =============================================================================
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks: [ablepro]
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      MODELS_DIR: /models
+      HF_HOME: /hf_cache
+    volumes:
+      - ./models:/models:ro
+      - backend_storage:/app/storage
+      - hf_cache:/hf_cache
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+    networks: [ablepro]
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      MODELS_DIR: /models
+      HF_HOME: /hf_cache
+    command:
+      ["celery", "-A", "app.tasks.celery_app", "worker",
+       "--loglevel=info", "--concurrency=2"]
+    volumes:
+      - ./models:/models:ro
+      - backend_storage:/app/storage
+      - hf_cache:/hf_cache
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks: [ablepro]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Empty -> the browser uses same-origin "/api" through nginx.
+        NEXT_PUBLIC_API_BASE_URL: ""
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks: [ablepro]
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [ablepro]
+
+volumes:
+  redis_data:
+  backend_storage:
+  hf_cache:
+
+networks:
+  ablepro:
+    driver: bridge

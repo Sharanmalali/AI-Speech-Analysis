@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local artefacts
+*.sqlite3
+*.db
+ablepro_dev.db
+storage/
+.env
+.env.*
+!.env.example
+
+# Tooling / VCS
+.git/
+.gitignore
+tests/
+*.md
