@@ -108,7 +108,7 @@ export interface PredictionRead {
   age_group: AgeGroup;
   age_confidence: number | null;
   raw_class_label: string | null;
-  gender_age_source: "model" | "llm";
+  gender_age_source: "model" | "llm" | "hf";
   atypicality: AtypicalityLabel;
   atypicality_score: number | null;
   atypicality_confidence: number | null;

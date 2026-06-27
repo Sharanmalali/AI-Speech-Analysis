@@ -12,7 +12,7 @@ export function SpeakerCard({ speaker, index }: { speaker: SpeakerRead; index: n
   const p = speaker.prediction;
   const atypical = p?.atypicality === "atypical";
   const color = speaker.color || "#6366F1";
-  const viaLLM = p?.gender_age_source === "llm";
+  const viaAI = p?.gender_age_source === "llm" || p?.gender_age_source === "hf";
 
   return (
     <motion.div
@@ -52,7 +52,7 @@ export function SpeakerCard({ speaker, index }: { speaker: SpeakerRead; index: n
               <span className="text-xs text-muted-foreground">·</span>
               <span className="text-sm font-semibold">{p ? titleCase(p.age_group) : "—"}</span>
             </div>
-            {viaLLM && (
+            {viaAI && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                 <Sparkles className="h-3 w-3" /> AI
               </span>

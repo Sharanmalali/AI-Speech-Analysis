@@ -5,10 +5,15 @@ import {
   ArrowRight,
   BarChart3,
   Brain,
+  FileCheck2,
   FileText,
+  Gauge,
+  KeyRound,
   Languages,
   Lock,
   Mic2,
+  ScrollText,
+  Server,
   ShieldCheck,
   Sparkles,
   Users,
@@ -22,6 +27,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { AnimatedBackground } from "@/components/marketing/animated-background";
 import { MarketingFooter } from "@/components/marketing/footer";
 import { MarketingNavbar } from "@/components/marketing/navbar";
+import { Workflow3D } from "@/components/marketing/workflow-3d";
 import { Button } from "@/components/ui/button";
 
 const HeroScene = dynamic(() => import("@/components/marketing/hero-scene"), { ssr: false });
@@ -38,55 +44,81 @@ const FEATURES = [
     icon: Users,
     title: "Speaker diarization",
     desc: "Pinpoints who spoke when across overlapping, multi-party conversations.",
-    span: "md:col-span-2",
     accent: "from-indigo-500/20 to-violet-500/20 text-indigo-500",
   },
   {
     icon: Languages,
     title: "Kannada → English",
     desc: "Transcribes Kannada speech and translates to English with precise timestamps.",
-    span: "",
     accent: "from-sky-500/20 to-cyan-500/20 text-sky-500",
   },
   {
     icon: Brain,
     title: "Typical / Atypical",
     desc: "Acoustic-prosodic screening flags atypical speech for clinical review.",
-    span: "",
     accent: "from-violet-500/20 to-fuchsia-500/20 text-violet-500",
   },
   {
     icon: Mic2,
     title: "Gender & age",
-    desc: "Per-speaker estimation, with an automatic Gemini audio fallback.",
-    span: "",
+    desc: "Per-speaker estimation via dedicated wav2vec2 models, with an AI fallback.",
     accent: "from-rose-500/20 to-pink-500/20 text-rose-500",
+  },
+  {
+    icon: BarChart3,
+    title: "Interactive dashboard",
+    desc: "Timelines, charts and a group-chat transcript make every result explorable.",
+    accent: "from-amber-500/20 to-orange-500/20 text-amber-500",
   },
   {
     icon: FileText,
     title: "Clinical PDF reports",
     desc: "Professionally formatted, downloadable analysis with charts and transcripts.",
-    span: "md:col-span-2",
     accent: "from-emerald-500/20 to-teal-500/20 text-emerald-500",
   },
 ];
 
-const WORKFLOW = [
-  { icon: Waves, title: "Upload & clean", desc: "Drag in audio. We reduce noise and standardise the signal." },
-  { icon: Users, title: "Diarize & transcribe", desc: "Separate speakers, then transcribe and translate each turn." },
-  { icon: Brain, title: "Analyse", desc: "Extract acoustic features and run gender, age and atypicality models." },
-  { icon: BarChart3, title: "Report", desc: "Explore an interactive dashboard and export a polished PDF." },
-];
-
 const SECURITY = [
-  "JWT & refresh tokens",
-  "Role-based access",
-  "Rate limiting",
-  "Strict file validation",
-  "Audit trails",
-  "Encrypted storage",
-  "HTTPS ready",
-  "Dockerised deploys",
+  {
+    icon: KeyRound,
+    title: "JWT + refresh tokens",
+    desc: "Short-lived access tokens with secure, rotating refresh sessions.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Role-based access",
+    desc: "Admin, doctor and user roles guard every protected endpoint.",
+  },
+  {
+    icon: Gauge,
+    title: "Rate limiting & throttling",
+    desc: "Redis-backed limits shield auth and upload routes from abuse.",
+  },
+  {
+    icon: FileCheck2,
+    title: "Strict file validation",
+    desc: "Content-type, extension and size checks on every upload.",
+  },
+  {
+    icon: ScrollText,
+    title: "Audit trails",
+    desc: "Every sensitive action is logged for full accountability.",
+  },
+  {
+    icon: Lock,
+    title: "Encrypted storage",
+    desc: "Audio and reports are stored privately with signed access.",
+  },
+  {
+    icon: Server,
+    title: "HTTPS ready",
+    desc: "TLS-terminating NGINX proxy and secure cookie defaults.",
+  },
+  {
+    icon: Sparkles,
+    title: "Hardened by default",
+    desc: "Input validation, CORS and no secrets in source — built in.",
+  },
 ];
 
 export default function LandingPage() {
@@ -204,15 +236,15 @@ export default function LandingPage() {
           </p>
         </Reveal>
 
-        <Stagger className="grid gap-5 md:grid-cols-3">
+        <Stagger className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <StaggerItem key={f.title} className={f.span}>
+            <StaggerItem key={f.title} className="h-full">
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="panel group h-full overflow-hidden p-7"
+                className="panel sheen group flex h-full flex-col p-7"
               >
-                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent}`}>
+                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} transition-transform duration-300 group-hover:scale-110`}>
                   <f.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-lg font-semibold">{f.title}</h3>
@@ -223,7 +255,7 @@ export default function LandingPage() {
         </Stagger>
       </section>
 
-      {/* WORKFLOW */}
+      {/* WORKFLOW — interactive 3D pipeline */}
       <section id="workflow" className="container py-20 md:py-28">
         <Reveal className="mx-auto mb-14 max-w-2xl text-center">
           <p className="eyebrow justify-center">
@@ -232,58 +264,61 @@ export default function LandingPage() {
           <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-[2.6rem]">
             From raw audio to clinical insight
           </h2>
+          <p className="mt-3 text-muted-foreground">
+            Each upload flows through an orchestrated pipeline of independent AI services —
+            explore the full journey in 3D.
+          </p>
         </Reveal>
 
-        <Stagger className="grid gap-5 md:grid-cols-4">
-          {WORKFLOW.map((step, i) => (
-            <StaggerItem key={step.title}>
-              <div className="panel relative h-full p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <step.icon className="h-5 w-5" />
-                  </div>
-                  <span className="font-display text-3xl font-extrabold text-muted-foreground/20">
-                    0{i + 1}
-                  </span>
-                </div>
-                <h3 className="font-semibold">{step.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+        <Workflow3D />
       </section>
 
       {/* SECURITY */}
       <section id="security" className="container py-20 md:py-28">
-        <Reveal>
-          <div className="panel relative overflow-hidden p-8 md:p-12">
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-            <div className="relative grid items-center gap-10 md:grid-cols-2">
-              <div>
-                <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white">
-                  <ShieldCheck className="h-5 w-5" />
+        <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+          <p className="eyebrow justify-center">
+            <ShieldCheck className="h-3.5 w-3.5" /> Security &amp; trust
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-[2.6rem]">
+            Enterprise-grade by design
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Sensitive clinical audio deserves more than an afterthought. Security is built into
+            every layer of the stack — from the token to the container.
+          </p>
+        </Reveal>
+
+        <Stagger className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SECURITY.map((s) => (
+            <StaggerItem key={s.title} className="h-full">
+              <motion.div
+                whileHover={{ y: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="panel group relative flex h-full flex-col overflow-hidden p-6"
+              >
+                <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-emerald-500/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100 md:opacity-0" />
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 text-emerald-600 transition-transform duration-300 group-hover:scale-110 dark:text-emerald-400">
+                  <s.icon className="h-5 w-5" />
                 </div>
-                <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-                  Secure &amp; production-ready
-                </h2>
-                <p className="mt-4 max-w-md leading-relaxed text-muted-foreground">
-                  Enterprise-grade security is built in from day one, not bolted on — so sensitive
-                  clinical audio stays protected at every step.
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {SECURITY.map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2.5 rounded-2xl border border-border/60 bg-secondary/40 px-4 py-3 text-sm font-medium"
-                  >
-                    <Lock className="h-4 w-4 shrink-0 text-primary" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
+                <h3 className="font-display text-base font-semibold leading-tight">{s.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+              </motion.div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+
+        <Reveal className="mt-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 rounded-2xl border border-border/60 bg-secondary/30 px-6 py-4 text-sm">
+            {[
+              "OWASP-aligned",
+              "100% inputs validated",
+              "Dockerised deploys",
+              "No secrets in source",
+            ].map((t) => (
+              <span key={t} className="inline-flex items-center gap-2 font-medium text-muted-foreground">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" /> {t}
+              </span>
+            ))}
           </div>
         </Reveal>
       </section>

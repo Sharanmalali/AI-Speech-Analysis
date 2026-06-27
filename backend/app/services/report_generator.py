@@ -186,22 +186,32 @@ def _speaking_time_donut(ctx: ReportContext, colors: list[str]) -> bytes | None:
     if plt is None:
         return None
     sizes = [max(0.0, s["total_speech_seconds"]) for s in ctx.speakers]
-    labels = [f"Speaker {s['label']}" for s in ctx.speakers]
     if not sizes or sum(sizes) == 0:
         return None
-
-    fig, ax = plt.subplots(figsize=(3.9, 3.3), dpi=200)
-    wedges, _ = ax.pie(
-        sizes, colors=colors[: len(sizes)], startangle=90,
-        wedgeprops={"width": 0.40, "edgecolor": "white", "linewidth": 2},
-    )
     total = sum(sizes)
+
+    def _clock(v: float) -> str:
+        m, s = divmod(int(round(v)), 60)
+        return f"{m}:{s:02d}"
+
+    labels = [
+        f"Speaker {s['label']}   ·   {_clock(v)}   ({v / total * 100:.0f}%)"
+        for s, v in zip(ctx.speakers, sizes, strict=False)
+    ]
+
+    fig, ax = plt.subplots(figsize=(4.0, 3.7), dpi=200)
+    wedges, _ = ax.pie(
+        sizes, colors=colors[: len(sizes)], startangle=90, counterclock=False,
+        wedgeprops={"width": 0.42, "edgecolor": "white", "linewidth": 2},
+    )
     m, s = divmod(int(total), 60)
-    ax.text(0, 0.10, f"{m}:{s:02d}", ha="center", va="center", fontsize=16,
+    ax.text(0, 0.08, f"{m}:{s:02d}", ha="center", va="center", fontsize=15,
             fontweight="bold", color=INK)
-    ax.text(0, -0.22, "total speech", ha="center", va="center", fontsize=7.5, color=MUTED)
-    ax.legend(wedges, labels, loc="lower center", bbox_to_anchor=(0.5, -0.14),
-              ncol=2, fontsize=7.5, frameon=False)
+    ax.text(0, -0.20, "total speech", ha="center", va="center", fontsize=7, color=MUTED)
+    # Single-column legend below the donut with seconds + percentage — no overlap.
+    ax.legend(wedges, labels, loc="upper center", bbox_to_anchor=(0.5, -0.01),
+              ncol=1, fontsize=7.5, frameon=False, handlelength=0.9, handletextpad=0.6,
+              labelspacing=0.5)
     ax.set(aspect="equal")
     buf = io.BytesIO()
     fig.tight_layout()
@@ -214,7 +224,7 @@ def _speech_pause_bar(ctx: ReportContext) -> bytes | None:
     plt = _mpl()
     if plt is None:
         return None
-    labels = [f"Spk {s['label']}" for s in ctx.speakers]
+    labels = [f"Speaker {s['label']}" for s in ctx.speakers]
     speech = [s["total_speech_seconds"] for s in ctx.speakers]
     pauses = [s["total_pause_seconds"] for s in ctx.speakers]
     if not labels:
@@ -224,17 +234,27 @@ def _speech_pause_bar(ctx: ReportContext) -> bytes | None:
 
     y = np.arange(len(labels))
     h = 0.36
-    fig, ax = plt.subplots(figsize=(3.9, 3.3), dpi=200)
-    ax.barh(y + h / 2, speech[::-1] if False else speech, height=h, color=NAVY, label="Speech")
-    ax.barh(y - h / 2, pauses, height=h, color=TEAL, label="Pauses")
+    fig, ax = plt.subplots(figsize=(4.0, 3.7), dpi=200)
+    ax.barh(y + h / 2, speech, height=h, color=NAVY, label="Speech", zorder=3)
+    ax.barh(y - h / 2, pauses, height=h, color=TEAL, label="Pauses", zorder=3)
+
+    maxv = max([*speech, *pauses, 1.0])
+    for yy, v in zip(y + h / 2, speech, strict=False):
+        ax.text(v + maxv * 0.02, yy, f"{v:.0f}s", va="center", fontsize=7, color=NAVY)
+    for yy, v in zip(y - h / 2, pauses, strict=False):
+        ax.text(v + maxv * 0.02, yy, f"{v:.0f}s", va="center", fontsize=7, color=TEAL)
+
     ax.set_yticks(y)
-    ax.set_yticklabels(labels)
+    ax.set_yticklabels(labels, fontsize=8)
+    ax.set_xlim(0, maxv * 1.20)
+    ax.xaxis.grid(True, color=HAIR, linewidth=0.5)
+    ax.set_axisbelow(True)
     for spine in ("top", "right", "left"):
         ax.spines[spine].set_visible(False)
     ax.spines["bottom"].set_color(HAIR)
     ax.tick_params(labelsize=8, length=0)
     ax.set_xlabel("Seconds", fontsize=8, color=MUTED)
-    ax.legend(fontsize=7.5, frameon=False, loc="lower right")
+    ax.legend(fontsize=7.5, frameon=False, loc="lower right", ncol=2)
     buf = io.BytesIO()
     fig.tight_layout()
     fig.savefig(buf, format="png", transparent=True)
@@ -328,6 +348,9 @@ class ReportGenerator:
         st_tsh = ps("tsh", fontName=BOLD, fontSize=8.7, leading=12)
         st_kn = ps("kn", fontName=KAN, fontSize=8.7, leading=12.5, textColor=HexColor("#334155"))
         st_en = ps("en", fontSize=8.7, leading=12.5, textColor=HexColor(INK))
+        st_avatar = ps("avatar", fontName=BOLD, fontSize=10, leading=11, textColor=white,
+                       alignment=TA_CENTER)
+        st_kntag = ps("kntag", fontName=BOLD, fontSize=6.5, leading=9, textColor=HexColor(MUTED))
 
         def rule(color=HAIR, w=0.6, space=4):  # type: ignore[no-untyped-def]
             return HRFlowable(width="100%", thickness=w, color=HexColor(color),
@@ -534,30 +557,53 @@ class ReportGenerator:
             story.append(Paragraph("No transcribed speech available.", st_body))
         for seg in segments:
             color = colors_by_label.get(seg["label"], NAVY)
-            line: list = [
+            tint = _tint(color, 0.12)
+
+            # Avatar: a small colour-filled square with the speaker label,
+            # nested so it stays compact (does not stretch to bubble height).
+            avatar = Table(
+                [[Paragraph(_esc(str(seg["label"])), st_avatar)]],
+                colWidths=[9 * mm], rowHeights=[9 * mm],
+            )
+            avatar.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, -1), HexColor(color)),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ]))
+
+            # Bubble content: header (speaker + time), EN translation, KN source.
+            bubble: list = [
                 Paragraph(
-                    f'<font color="{MUTED}">{format_range(seg["start"], seg["end"])}</font> '
-                    f'&nbsp;<font color="{color}"><b>Speaker {seg["label"]}</b></font>',
+                    f'<font color="{color}"><b>Speaker {seg["label"]}</b></font> &nbsp;'
+                    f'<font color="{MUTED}">{format_range(seg["start"], seg["end"])}</font>',
                     st_tsh,
                 )
             ]
+            if seg.get("text_translated"):
+                bubble.append(Paragraph(f'<b>{_esc(seg["text_translated"])}</b>', st_en))
             src_txt = seg.get("text_source")
             if src_txt:
                 kn_style = st_kn if _has_kannada(src_txt) else st_en
-                line.append(Paragraph(f'<font color="{MUTED}">KN&nbsp;</font>{_esc(src_txt)}', kn_style))
-            if seg.get("text_translated"):
-                line.append(Paragraph(
-                    f'<font color="{MUTED}">EN&nbsp;</font><b>{_esc(seg["text_translated"])}</b>', st_en))
-            line.append(Spacer(1, 3.5 * mm))
-            # Indent the block with a thin speaker-colour rule via a 1-col table.
-            wrap = Table([[b] for b in line], colWidths=[170 * mm])
-            wrap.setStyle(TableStyle([
-                ("LINEBEFORE", (0, 0), (0, -1), 2, HexColor(color)),
-                ("LEFTPADDING", (0, 0), (0, -1), 9),
-                ("RIGHTPADDING", (0, 0), (0, -1), 0),
-                ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+                bubble.append(Paragraph(
+                    f'<font color="{MUTED}" size="6.5"><b>KN</b></font>&nbsp; {_esc(src_txt)}',
+                    kn_style,
+                ))
+
+            row = Table([[avatar, bubble]], colWidths=[11 * mm, 163 * mm])
+            row.setStyle(TableStyle([
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                # avatar cell — flush, small right gap to the bubble
+                ("LEFTPADDING", (0, 0), (0, 0), 0), ("RIGHTPADDING", (0, 0), (0, 0), 3),
+                ("TOPPADDING", (0, 0), (0, 0), 0), ("BOTTOMPADDING", (0, 0), (0, 0), 0),
+                # bubble cell — tinted background + speaker-colour edge
+                ("BACKGROUND", (1, 0), (1, 0), HexColor(tint)),
+                ("LINEBEFORE", (1, 0), (1, 0), 2.5, HexColor(color)),
+                ("LEFTPADDING", (1, 0), (1, 0), 9), ("RIGHTPADDING", (1, 0), (1, 0), 9),
+                ("TOPPADDING", (1, 0), (1, 0), 6), ("BOTTOMPADDING", (1, 0), (1, 0), 6),
             ]))
-            story.append(KeepTogether([wrap]))
+            story.append(KeepTogether([row, Spacer(1, 3 * mm)]))
 
         # ---- Build ---------------------------------------------------------
         buf = io.BytesIO()
@@ -661,6 +707,25 @@ def _pct(value: float | None) -> str:
 
 def _title(value: str | None) -> str:
     return (value or "—").replace("_", " ").title()
+
+
+def _tint(hex_color: str, amount: float = 0.12) -> str:
+    """Return a very light tint of ``hex_color`` (blend toward white).
+
+    ``amount`` is the proportion of the original colour retained (0.12 -> a
+    soft 12% wash on white), used for chat-bubble backgrounds.
+    """
+    h = (hex_color or "").lstrip("#")
+    if len(h) != 6:
+        return ZEBRA
+    try:
+        r, g, b = (int(h[i : i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return ZEBRA
+    r = round(r * amount + 255 * (1 - amount))
+    g = round(g * amount + 255 * (1 - amount))
+    b = round(b * amount + 255 * (1 - amount))
+    return f"#{r:02X}{g:02X}{b:02X}"
 
 
 def _esc(text: str) -> str:
