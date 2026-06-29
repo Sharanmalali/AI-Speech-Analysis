@@ -548,8 +548,8 @@ class ReportGenerator:
         story.append(PageBreak())
         story.append(Paragraph("Verbatim Transcript", st_section))
         story.append(Paragraph(
-            "Chronological record of each utterance with timestamp, speaker, original "
-            "Kannada (KN) text and English (EN) translation.", st_small))
+            "Chronological record of each utterance with timestamp, speaker and the "
+            "English (EN) translation of the spoken content.", st_small))
         story.append(rule(HAIR, 0.6, 5))
 
         segments = _ordered_segments(ctx)
@@ -573,7 +573,7 @@ class ReportGenerator:
                 ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
             ]))
 
-            # Bubble content: header (speaker + time), EN translation, KN source.
+            # Bubble content: header (speaker + time) + English translation only.
             bubble: list = [
                 Paragraph(
                     f'<font color="{color}"><b>Speaker {seg["label"]}</b></font> &nbsp;'
@@ -583,13 +583,9 @@ class ReportGenerator:
             ]
             if seg.get("text_translated"):
                 bubble.append(Paragraph(f'<b>{_esc(seg["text_translated"])}</b>', st_en))
-            src_txt = seg.get("text_source")
-            if src_txt:
-                kn_style = st_kn if _has_kannada(src_txt) else st_en
+            else:
                 bubble.append(Paragraph(
-                    f'<font color="{MUTED}" size="6.5"><b>KN</b></font>&nbsp; {_esc(src_txt)}',
-                    kn_style,
-                ))
+                    '<font color="%s"><i>(no speech translated)</i></font>' % MUTED, st_en))
 
             row = Table([[avatar, bubble]], colWidths=[11 * mm, 163 * mm])
             row.setStyle(TableStyle([

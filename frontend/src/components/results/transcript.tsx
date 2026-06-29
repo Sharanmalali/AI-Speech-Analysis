@@ -152,15 +152,11 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
                       borderColor: withAlpha(m.color, "33"),
                     }}
                   >
-                    {m.translated && (
+                    {m.translated ? (
                       <p className="text-sm leading-relaxed text-foreground">{m.translated}</p>
-                    )}
-                    {m.source && (
-                      <p className="mt-1.5 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
-                        <span className="mt-px rounded bg-muted px-1 py-px text-[9px] font-bold uppercase tracking-wide">
-                          KN
-                        </span>
-                        <span className="min-w-0">{m.source}</span>
+                    ) : (
+                      <p className="text-sm italic leading-relaxed text-muted-foreground">
+                        (no speech translated)
                       </p>
                     )}
                     {grouped && (
