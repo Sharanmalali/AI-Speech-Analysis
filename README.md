@@ -422,7 +422,3 @@ For questions, issues, or feature requests:
 
 ---
 
-<div align="center">
-  <p><strong>Built with ❤️ by the AblePro Solutions Team</strong></p>
-  <p>Empowering clinical decision-making through AI-powered voice analytics</p>
-</div>
