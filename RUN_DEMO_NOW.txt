@@ -1,0 +1,69 @@
+========================================
+  DEMO IS FIXED - RUN THIS NOW
+========================================
+
+I FIXED THE AUTHENTICATION ISSUE!
+
+The demo is now at: /demo (not /dashboard/demo)
+This means NO LOGIN REQUIRED!
+
+========================================
+  STEP 1: RESTART FRONTEND
+========================================
+
+Open Command Prompt and run:
+
+cd C:\Projects\AI-Speech-Analysis\frontend
+npm run dev
+
+Wait for: "Ready in X ms"
+
+========================================
+  STEP 2: OPEN DEMO IN BROWSER
+========================================
+
+Go to: http://localhost:3000/demo
+
+You should see:
+- Demo Mode banner
+- 3 speakers
+- Charts and data
+- NO LOGIN PROMPT!
+
+========================================
+  STEP 3: TEST FROM LANDING PAGE
+========================================
+
+1. Go to: http://localhost:3000
+2. Click "Try Demo" button
+3. Should go to /demo
+4. NO authentication!
+
+========================================
+  ROUTES EXPLAINED
+========================================
+
+OLD (Wrong):
+  /dashboard/demo  <- Required login ❌
+
+NEW (Correct):  
+  /demo            <- Public, no login ✅
+
+========================================
+  IF BACKEND NOT RUNNING
+========================================
+
+For Docker:
+  docker compose up -d
+
+For Local:
+  cd backend
+  .venv\Scripts\activate
+  uvicorn app.main:app --reload
+
+========================================
+
+THE DEMO IS NOW PUBLIC!
+Visit: http://localhost:3000/demo
+
+========================================
