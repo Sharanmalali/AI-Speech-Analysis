@@ -27,7 +27,7 @@ export default function DemoPage() {
     queryKey: ["demo-result"],
     queryFn: () => demoService.getSampleResult(),
     retry: false,
-    staleTime: Infinity, // Demo data never goes stale
+    staleTime: Infinity,
   });
 
   function handleDownloadClick() {
@@ -38,9 +38,8 @@ export default function DemoPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-muted/30">
-        {/* Simple Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
+      <div className="flex min-h-screen flex-col bg-muted/30">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-soft">
               <AudioLines className="h-5 w-5 text-white" />
@@ -50,7 +49,7 @@ export default function DemoPage() {
           <ThemeToggle />
         </header>
 
-        <main className="relative">
+        <main className="relative flex-1 overflow-y-auto">
           <div className="pointer-events-none absolute inset-0 bg-dots opacity-50" />
           <div className="relative mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
             <div className="space-y-6">
@@ -73,8 +72,8 @@ export default function DemoPage() {
 
   if (isError || !data) {
     return (
-      <div className="min-h-screen bg-muted/30">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
+      <div className="flex min-h-screen flex-col bg-muted/30">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-soft">
               <AudioLines className="h-5 w-5 text-white" />
@@ -87,7 +86,7 @@ export default function DemoPage() {
             </Link>
           </Button>
         </header>
-        <main className="relative">
+        <main className="relative flex-1">
           <div className="mx-auto max-w-7xl px-4 py-16">
             <div className="panel flex flex-col items-center gap-3 py-16 text-center">
               <AlertTriangle className="h-8 w-8 text-destructive" />
@@ -106,9 +105,9 @@ export default function DemoPage() {
   const atypicalCount = data.speakers.filter((s) => s.prediction?.atypicality === "atypical").length;
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      {/* Public Header - No Auth Required */}
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
+    <div className="flex min-h-screen flex-col bg-muted/30">
+      {/* Fixed Header */}
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl md:px-8">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-soft">
             <AudioLines className="h-5 w-5 text-white" />
@@ -134,17 +133,18 @@ export default function DemoPage() {
         </div>
       </header>
 
-      <main className="relative">
+      {/* Scrollable Content */}
+      <main className="relative flex-1 overflow-y-auto">
         <div className="pointer-events-none absolute inset-0 bg-dots opacity-50" />
         <div className="relative mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
           <div className="space-y-8">
             {/* Demo Banner */}
             <div className="relative overflow-hidden rounded-2xl border-2 border-primary/30 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white">
                   <Sparkles className="h-5 w-5" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="font-semibold">Demo Mode - Public Access</h3>
                   <p className="text-sm text-muted-foreground">
                     This is a sample analysis showcasing AblePro's capabilities. Sign up to analyze your own audio files!
@@ -156,7 +156,7 @@ export default function DemoPage() {
             {/* Page Header */}
             <div className="space-y-4">
               <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-muted-foreground">Sample Analysis Results</p>
                   <h1 className="mt-1 font-display text-3xl font-bold tracking-tight md:text-4xl">
                     {data.audio.original_filename}
@@ -165,7 +165,7 @@ export default function DemoPage() {
                     {data.language_source.toUpperCase()} → {data.language_target.toUpperCase()} · transcribed & screened
                   </p>
                 </div>
-                <Button variant="gradient" onClick={handleDownloadClick} disabled={downloading}>
+                <Button variant="gradient" onClick={handleDownloadClick} disabled={downloading} className="shrink-0">
                   {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
                   Download PDF
                 </Button>
@@ -190,7 +190,8 @@ export default function DemoPage() {
               />
             </div>
 
-            <Tabs defaultValue="overview" className="space-y-2">
+            {/* Tabs */}
+            <Tabs defaultValue="overview" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="speakers">Speakers</TabsTrigger>
