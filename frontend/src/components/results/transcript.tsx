@@ -78,6 +78,7 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
         {speakers.map((s) => {
           const color = s.color || FALLBACK;
           const off = hidden.has(s.label);
+          const speakerNum = s.label.replace(/[^0-9]/g, "");
           return (
             <button
               key={s.id}
@@ -92,12 +93,12 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
               style={off ? undefined : { background: withAlpha(color, "1A") }}
             >
               <span
-                className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white"
+                className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
                 style={{ background: color }}
               >
-                {s.label}
+                {speakerNum}
               </span>
-              Speaker {s.label}
+              Speaker {speakerNum}
               <span className="text-[10px] text-muted-foreground">{s.transcriptions.length}</span>
             </button>
           );
@@ -113,6 +114,7 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
           visible.map((m, i) => {
             const prev = visible[i - 1];
             const grouped = prev && prev.label === m.label;
+            const speakerNum = m.label.replace(/[^0-9]/g, "");
             return (
               <motion.div
                 key={m.id}
@@ -125,10 +127,10 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
                 <div className="w-9 shrink-0">
                   {!grouped && (
                     <div
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm"
                       style={{ background: m.color }}
                     >
-                      {m.label}
+                      {speakerNum}
                     </div>
                   )}
                 </div>
@@ -138,7 +140,7 @@ export function Transcript({ speakers }: { speakers: SpeakerRead[] }) {
                   {!grouped && (
                     <div className="mb-1 flex items-center gap-2">
                       <span className="text-sm font-semibold" style={{ color: m.color }}>
-                        Speaker {m.label}
+                        Speaker {speakerNum}
                       </span>
                       <span className="font-mono text-[11px] text-muted-foreground">
                         {formatTimestamp(m.start)} – {formatTimestamp(m.end)}

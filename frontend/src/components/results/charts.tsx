@@ -66,7 +66,7 @@ function ChartTooltip({
 
 export function SpeakingTimeChart({ speakers }: { speakers: SpeakerRead[] }) {
   const data = speakers.map((s) => ({
-    name: `Speaker ${s.label}`,
+    name: `Speaker ${s.label.replace(/[^0-9]/g, "")}`,
     value: Number(s.total_speech_seconds.toFixed(1)),
     color: s.color || "#6366F1",
   }));
@@ -137,7 +137,7 @@ export function SpeakingTimeChart({ speakers }: { speakers: SpeakerRead[] }) {
 
 export function SpeechPauseChart({ speakers }: { speakers: SpeakerRead[] }) {
   const data = speakers.map((s) => ({
-    name: `Speaker ${s.label}`,
+    name: `Speaker ${s.label.replace(/[^0-9]/g, "")}`,
     Speech: Number(s.total_speech_seconds.toFixed(1)),
     Pauses: Number(s.total_pause_seconds.toFixed(1)),
   }));
