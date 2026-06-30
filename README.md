@@ -109,13 +109,11 @@ High-resolution frequency-domain representations showing phonetic patterns, paus
 
 ## 🎥 Demo Videos
 
-Explore the project through the videos below:
+- **📌 Full Project Walkthrough:**  
+  https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link
 
-### 📌 Project Walkthrough
-[![Project Walkthrough](https://img.shields.io/badge/Watch-Project%20Walkthrough-blue?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link)
-
-### 🧠 ML Model Working
-[![ML Model Working](https://img.shields.io/badge/Watch-ML%20Model%20Working-green?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1f8J3FUyhAcTKho-Zz1fCN0dFj4yjYeBB/view?usp=drive_link)
+- **🧠 ML Model Working:**  
+  https://drive.google.com/file/d/1f8J3FUyhAcTKho-Zz1fCN0dFj4yjYeBB/view?usp=drive_link
 
 ### Dashboard Insights
 The frontend translates complex ML outputs into intuitive visualizations:
