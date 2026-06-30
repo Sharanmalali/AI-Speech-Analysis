@@ -41,6 +41,7 @@ class SpeakerRead(ORMModel):
     total_pause_seconds: float
     segment_count: int
     word_count: int
+    clinical_narrative: str | None = None  # AI-generated clinical summary
     prediction: PredictionRead | None
     transcriptions: list[TranscriptionRead]
 

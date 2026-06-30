@@ -124,6 +124,7 @@ export interface SpeakerRead {
   total_pause_seconds: number;
   segment_count: number;
   word_count: number;
+  clinical_narrative: string | null;  // AI-generated clinical summary
   prediction: PredictionRead | null;
   transcriptions: TranscriptionRead[];
 }

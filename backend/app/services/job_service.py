@@ -192,6 +192,7 @@ def persist_result(db: Session, job: Job, result: PipelineResult) -> None:
             total_pause_seconds=sr.total_pause_seconds,
             segment_count=sr.segment_count,
             word_count=sr.word_count,
+            clinical_narrative=sr.clinical_narrative,  # Store AI-generated narrative
         )
         db.add(speaker)
         db.flush()

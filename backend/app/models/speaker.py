@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Float, ForeignKey, Integer, String
+from sqlalchemy import Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base, TimestampMixin, UUIDMixin
@@ -37,6 +37,9 @@ class Speaker(Base, UUIDMixin, TimestampMixin):
     total_pause_seconds: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     segment_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     word_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+
+    # AI-generated clinical narrative (3-4 sentences summarizing findings).
+    clinical_narrative: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # --- Relationships -------------------------------------------------------
     job: Mapped["Job"] = relationship(back_populates="speakers")

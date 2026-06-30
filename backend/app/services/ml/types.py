@@ -117,6 +117,7 @@ class SpeakerResult:
     features: AcousticFeatures | None
     gender_age: GenderAgePrediction | None
     atypicality: AtypicalityPrediction | None
+    clinical_narrative: str | None = None  # AI-generated clinical summary
 
 
 @dataclass(slots=True)
