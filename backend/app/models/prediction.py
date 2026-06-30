@@ -73,6 +73,16 @@ class Prediction(Base, UUIDMixin, TimestampMixin):
             return str(self.features.get("gender_age_source") or "model")
         return "model"
 
+    @property
+    def feature_contributions(self) -> list[dict] | None:
+        """Feature contributions for explainability.
+
+        Stored inside the ``features`` JSON alongside acoustic features.
+        """
+        if isinstance(self.features, dict):
+            return self.features.get("feature_contributions")
+        return None
+
     def __repr__(self) -> str:  # pragma: no cover
         return (
             f"<Prediction gender={self.gender.value} age={self.age_group.value} "

@@ -113,6 +113,16 @@ export interface PredictionRead {
   atypicality_score: number | null;
   atypicality_confidence: number | null;
   features: Record<string, number> | null;
+  feature_contributions: FeatureContribution[] | null;
+}
+
+export interface FeatureContribution {
+  feature: string;
+  display_name: string;
+  contribution: number;
+  value: number;
+  scaled_value: number;
+  direction: "high" | "low" | "normal";
 }
 
 export interface SpeakerRead {

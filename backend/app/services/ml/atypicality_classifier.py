@@ -138,6 +138,31 @@ class AtypicalityClassifier:
             confidence=round(confidence, 4),
         )
 
+    def get_feature_contributions(
+        self, features: AcousticFeatures, baseline_score: float, top_k: int = 7
+    ) -> list[dict[str, Any]]:
+        """Compute feature contributions for explainability.
+        
+        Args:
+            features: Acoustic features for the speaker
+            baseline_score: The atypicality score from predict()
+            top_k: Number of top features to return
+            
+        Returns:
+            List of feature contribution dicts
+        """
+        self.load()
+        from app.services.ml.explainability import compute_feature_contributions
+
+        return compute_feature_contributions(
+            features,
+            baseline_score,
+            self._scaler,
+            self._iforest,
+            self._feature_order,
+            top_k=top_k,
+        )
+
 
 # --------------------------------------------------------------- singleton
 _instance: AtypicalityClassifier | None = None

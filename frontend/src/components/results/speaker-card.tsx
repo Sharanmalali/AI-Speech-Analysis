@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Stethoscope } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { ConfidenceBar } from "@/components/ui/confidence-bar";
+import { ExplainabilityPanel } from "@/components/results/explainability-panel";
 import type { SpeakerRead } from "@/lib/types";
 import { cn, formatTimestamp, titleCase } from "@/lib/utils";
 
@@ -69,6 +70,29 @@ export function SpeakerCard({ speaker, index }: { speaker: SpeakerRead; index: n
           <Stat label="Speech" value={formatTimestamp(speaker.total_speech_seconds)} />
           <Stat label="Pauses" value={formatTimestamp(speaker.total_pause_seconds)} />
         </div>
+
+        {/* Clinical Narrative - AI-generated summary */}
+        {speaker.clinical_narrative && (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+            <div className="mb-2 flex items-center gap-2 text-primary">
+              <Stethoscope className="h-4 w-4" />
+              <span className="text-xs font-semibold uppercase tracking-wide">
+                Clinical Assessment
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold">
+                <Sparkles className="h-3 w-3" /> AI
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed text-foreground/90">
+              {speaker.clinical_narrative}
+            </p>
+          </div>
+        )}
+
+        {/* Explainability Panel - Feature Contributions */}
+        {p?.feature_contributions && p.feature_contributions.length > 0 && (
+          <ExplainabilityPanel contributions={p.feature_contributions} isAtypical={atypical} />
+        )}
 
         {/* Atypicality detail */}
         {p?.atypicality_score != null && (
