@@ -56,7 +56,7 @@ AblePro is a comprehensive voice diagnostic and demographic analysis system that
 AblePro uses a hybrid, 3-stage ML pipeline that balances performance, interpretability, and accuracy:
 
 <div align="center">
-  <img src="model_architecture.png" alt="Model Architecture" width="800"/>
+  <img src="resources/model_architecture.png" alt="Model Architecture" width="800"/>
   <p><i>Sequential hybrid pipeline combining pre-trained transformers with custom classifiers</i></p>
 </div>
 
@@ -96,14 +96,14 @@ AblePro uses a hybrid, 3-stage ML pipeline that balances performance, interpreta
 High-resolution frequency-domain representations showing phonetic patterns, pauses, and vocal intensity:
 
 <div align="center">
-  <img src="spectogram1.png" alt="Spectrogram Example 1" width="400"/>
-  <img src="spectogram2.png" alt="Spectrogram Example 2" width="400"/>
+  <img src="resources/spectogram1.png" alt="Spectrogram Example 1" width="400"/>
+  <img src="resources/spectogram2.png" alt="Spectrogram Example 2" width="400"/>
   <p><i>Magma-mapped spectrograms revealing frequency distribution over time</i></p>
 </div>
 
 <div align="center">
-  <img src="spectogram3.png" alt="Spectrogram Example 3" width="400"/>
-  <img src="spectogram4.png" alt="Spectrogram Example 4" width="400"/>
+  <img src="resources/spectogram3.png" alt="Spectrogram Example 3" width="400"/>
+  <img src="resources/spectogram4.png" alt="Spectrogram Example 4" width="400"/>
   <p><i>Visual representation of vocal cord vibrations and acoustic biomarkers</i></p>
 </div>
 
@@ -421,8 +421,3 @@ For questions, issues, or feature requests:
 - 📖 Docs: [Documentation](docs/)
 
 ---
-
-<div align="center">
-  <p><strong>Built with ❤️ by the AblePro Solutions Team</strong></p>
-  <p>Empowering clinical decision-making through AI-powered voice analytics</p>
-</div>
