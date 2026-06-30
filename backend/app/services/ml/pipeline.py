@@ -235,26 +235,6 @@ class AudioAnalysisPipeline:
             self._emit(JobStage.ATYPICALITY_CLASSIFICATION, base_pct + 20.0 / n)
             atypicality = self._atypicality.predict(features)
 
-            # Compute feature contributions for explainability
-            if atypicality and atypicality.score is not None:
-                try:
-                    contributions = self._atypicality.get_feature_contributions(
-                        features, atypicality.score, top_k=7
-                    )
-                    atypicality.feature_contributions = contributions
-                except Exception as exc:  # noqa: BLE001
-                    logger.warning("feature_contributions_failed", error=str(exc))
-
-            # Generate clinical narrative (optional, non-fatal if it fails)
-            clinical_narrative = None
-            if self._narrative_generator.is_available:
-                try:
-                    clinical_narrative = self._narrative_generator.generate(
-                        features, gender_age, atypicality
-                    )
-                except Exception as exc:  # noqa: BLE001
-                    logger.warning("clinical_narrative_generation_failed", error=str(exc))
-
             speakers.append(
                 SpeakerResult(
                     label=_label_for_index(idx),
@@ -268,7 +248,6 @@ class AudioAnalysisPipeline:
                     features=features,
                     gender_age=gender_age,
                     atypicality=atypicality,
-                    clinical_narrative=clinical_narrative,
                 )
             )
 

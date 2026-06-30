@@ -30,7 +30,6 @@ class PredictionRead(ORMModel):
     atypicality_score: float | None
     atypicality_confidence: float | None
     features: dict | None
-    feature_contributions: list[dict] | None = None  # Explainability data
 
 
 class SpeakerRead(ORMModel):

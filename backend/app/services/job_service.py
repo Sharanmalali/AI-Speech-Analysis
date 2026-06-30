@@ -217,9 +217,6 @@ def persist_result(db: Session, job: Job, result: PipelineResult) -> None:
                 # Stash the prediction provenance alongside the features so we
                 # avoid a schema migration; surfaced via Prediction.gender_age_source.
                 feature_payload["gender_age_source"] = ga.source
-            # Store feature contributions for explainability
-            if at and at.feature_contributions:
-                feature_payload["feature_contributions"] = at.feature_contributions
         db.add(
             Prediction(
                 speaker_id=speaker.id,

@@ -100,7 +100,6 @@ class AtypicalityPrediction:
     label: str                        # "typical" | "atypical" | "unknown"
     score: float                      # IsolationForest decision_function output
     confidence: float | None = None
-    feature_contributions: list[dict] = field(default_factory=list)  # Explainability data
 
 
 @dataclass(slots=True)
