@@ -1,15 +1,123 @@
-# AblePro Solutions
+# 🎙️ AblePro Solutions
 
-**AI-Powered Multi-speaker Mental Health Audio Analytics Platform**
+### AI-Powered Multi-Speaker Mental Health Audio Analytics Platform
 
-AblePro ingests a conversation recording and produces an end-to-end analysis:
-speaker diarization, Kannada→English transcription with timestamps, per-speaker
-gender & age-group estimation, and typical/atypical speech screening — surfaced
-in an interactive dashboard and a downloadable PDF report.
+<div align="center">
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+**[🚀 Try Demo](http://localhost:3000/demo)** • **[📖 Documentation](docs/)** • **[🔧 API Docs](http://localhost:8000/docs)**
+
+</div>
 
 ---
 
-## Architecture
+## 🌟 Overview
+
+AblePro is a comprehensive voice diagnostic and demographic analysis system that transforms raw audio recordings into actionable clinical insights. The platform processes multi-speaker conversations end-to-end, delivering:
+
+- 🗣️ **Speaker Diarization** — Isolates "who spoke when" in multi-party conversations
+- 🌐 **Kannada → English Transcription** — Real-time speech-to-text with precise timestamps
+- 👤 **Demographic Analysis** — Per-speaker gender and age-group prediction
+- 🧠 **Clinical Screening** — Typical vs. atypical speech pattern detection
+- 📊 **Interactive Dashboard** — Real-time visualizations with charts, timelines, and transcripts
+- 📄 **Clinical PDF Reports** — Professional, downloadable diagnostic summaries
+
+---
+
+## 🎯 Key Features
+
+### 🔬 Advanced Audio Analysis
+- **Multi-speaker isolation** using state-of-the-art pyannote.audio diarization
+- **Acoustic feature extraction**: Jitter, Shimmer, HNR, F0 pitch, spectral flux, pause ratios
+- **Unsupervised anomaly detection** via Isolation Forest for clinical typicality screening
+- **Deep learning transformers** for demographic classification (wav2vec2-based models)
+
+### 🏗️ Production-Ready Architecture
+- **Containerized deployment** with Docker Compose for seamless scaling
+- **Asynchronous processing** via Celery + Redis for heavy ML workloads
+- **Real-time progress tracking** with WebSocket-ready job status updates
+- **Enterprise security**: JWT auth, RBAC, rate limiting, audit logs
+
+### 🎨 Modern User Experience
+- **Responsive dashboard** built with Next.js 15 and Tailwind CSS
+- **Real-time charts** using Recharts for data visualization
+- **Dark/light theme** support with next-themes
+- **Accessible design** following WCAG guidelines
+
+---
+
+## 🧠 Model Architecture
+
+AblePro uses a hybrid, 3-stage ML pipeline that balances performance, interpretability, and accuracy:
+
+<div align="center">
+  <img src="model_architecture.png" alt="Model Architecture" width="800"/>
+  <p><i>Sequential hybrid pipeline combining pre-trained transformers with custom classifiers</i></p>
+</div>
+
+### 🔄 Processing Pipeline
+
+1. **Segmentation Engine** (pyannote.audio)
+   - Pre-trained speaker diarization
+   - Isolates speaker segments with timestamps
+   - Handles overlapping speech and multi-party conversations
+
+2. **Typicality Engine** (Custom Scikit-Learn)
+   - Extracts 7 acoustic biomarkers (latency, pause ratio, pitch, jitter, shimmer, HNR)
+   - StandardScaler normalization
+   - IsolationForest (200 trees) for anomaly detection
+   - Detects atypical speech patterns for clinical review
+
+3. **Demographic Engine** (Hugging Face Transformers)
+   - **Gender**: `wav2vec2-large-xlsr-53-gender-recognition-librispeech`
+   - **Age Group**: `wav2vec2-xls-r-300m-adult-child-cls`
+   - Transfer learning from massive pre-trained datasets
+
+### 🎯 Design Rationale
+
+**Why Hybrid?** Instead of training a monolithic neural network from scratch (requiring terabytes of data), this system:
+- ✅ Leverages state-of-the-art pre-trained transformers for standard demographics
+- ✅ Uses lightweight, interpretable scikit-learn for custom clinical tasks
+- ✅ Provides explainable AI with clear acoustic feature contributions
+- ✅ Requires minimal training data for deployment
+
+**Optimized Deployment**: Docker volume caching prevents re-downloading 1.5GB+ of model weights on every restart, ensuring rapid deployment and low bandwidth consumption.
+
+---
+
+## 📊 Visualization Examples
+
+### Mel-Spectrograms
+High-resolution frequency-domain representations showing phonetic patterns, pauses, and vocal intensity:
+
+<div align="center">
+  <img src="spectogram1.png" alt="Spectrogram Example 1" width="400"/>
+  <img src="spectogram2.png" alt="Spectrogram Example 2" width="400"/>
+  <p><i>Magma-mapped spectrograms revealing frequency distribution over time</i></p>
+</div>
+
+<div align="center">
+  <img src="spectogram3.png" alt="Spectrogram Example 3" width="400"/>
+  <img src="spectogram4.png" alt="Spectrogram Example 4" width="400"/>
+  <p><i>Visual representation of vocal cord vibrations and acoustic biomarkers</i></p>
+</div>
+
+### Dashboard Insights
+The frontend translates complex ML outputs into intuitive visualizations:
+- 📈 **Speaking time distribution** (pie charts)
+- 📊 **Speech vs. pause analysis** (bar charts)
+- ⏱️ **Conversation timeline** (interactive timeline)
+- 🎤 **Speaker cards** with confidence scores
+- 💬 **Bilingual transcripts** (Kannada + English)
+
+---
+
+## 🏛️ System Architecture
 
 ```
                         ┌─────────────┐
@@ -33,156 +141,288 @@ in an interactive dashboard and a downloadable PDF report.
         ┌───────────────┬──────────┬─────────┴───────────┬───────────────┐
         ▼               ▼          ▼                     ▼               ▼
   Diarization    Transcription   Feature           Gender/Age      Atypicality
-  (pyannote)     (Whisper)       extraction        (RandomForest)  (IForest)
+  (pyannote)     (Whisper)       extraction        (wav2vec2)      (IForest)
                                  (librosa/praat)
 ```
 
-Persistence is **Supabase PostgreSQL**; uploaded audio and generated reports
-live in **Supabase Storage** (with a local-filesystem fallback for dev).
-
-The ML layer is **service-oriented**: each model is an independent, lazily
-loaded singleton. They are never merged into one artifact and are warmed once
-at worker startup.
-
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and
-[`docs/API.md`](docs/API.md) for details.
+**Persistence**: Supabase PostgreSQL + Supabase Storage (with local filesystem fallback)  
+**ML Layer**: Service-oriented, lazily-loaded singletons warmed at worker startup
 
 ---
 
-## Repository layout
+## 🚀 Quick Start
 
-```
-.
-├── backend/            FastAPI app, ML services, Celery tasks, tests
-│   ├── app/
-│   │   ├── config/     Pydantic settings
-│   │   ├── core/       logging, security (JWT/bcrypt), exceptions, rate limit
-│   │   ├── database/   SQLAlchemy engine, base, init
-│   │   ├── models/     ORM models (users, jobs, speakers, …)
-│   │   ├── schemas/    Pydantic request/response models
-│   │   ├── routers/    auth, audio, jobs, results, reports, admin, health
-│   │   ├── services/   ml/ (diarization, transcription, classifiers,
-│   │   │               feature_extraction, pipeline, registry),
-│   │   │               storage, report_generator, job_service, auth_service
-│   │   ├── tasks/       Celery app + pipeline task + dispatch
-│   │   └── utils/       audio, files, timestamp helpers
-│   ├── alembic/         migrations
-│   └── tests/           pytest suite
-├── frontend/            Next.js 15 (App Router, TS, Tailwind, shadcn-style UI)
-├── docker/nginx/        reverse-proxy config
-├── models/              the three pre-trained .pkl artifacts
-├── docs/                architecture & API docs
-├── docker-compose.yml          production stack
-└── docker-compose.dev.yml      dev overrides (hot reload)
-```
+### Prerequisites
+- Docker & Docker Compose
+- Hugging Face account (for model access tokens)
 
----
-
-## The ML models
-
-Three pre-trained artifacts in `models/` are loaded **as-is** (never retrained):
-
-| File | Type | Inputs |
-|------|------|--------|
-| `atypicality_scaler.pkl` | `StandardScaler` | 7 acoustic features |
-| `atypicality_iforest.pkl` | `IsolationForest` (200 trees) | the scaled 7 features |
-| `gender_age_clf.pkl` | `RandomForestClassifier` | 483 features |
-
-The 7 atypicality features (fixed order): `latency_to_speak_sec`,
-`pause_to_speech_ratio`, `pronunciation_flux_var`, `f0_mean`, `jitter`,
-`shimmer`, `hnr`.
-
-> **⚠️ Important model caveat.** The supplied `gender_age_clf.pkl` was trained
-> on data containing a **single class** (`classes_ == [0]`), so it always
-> predicts `0` and gender/age are reported as **"unknown"**. The service reads
-> `model.classes_` at runtime and maps labels via a configurable table, so
-> dropping in a properly-trained multi-class model requires **no code change**.
-> The 480 numeric features have no recoverable names in the pickle; we feed a
-> documented, deterministic log-mel summary (`feature_extraction.py`). Align
-> that function with your original training pipeline for meaningful output.
-
----
-
-## Quick start (Docker)
-
+### 1️⃣ Clone the Repository
 ```bash
-# 1. Configure secrets
-cp backend/.env.example backend/.env
-#    Edit backend/.env: set JWT_SECRET_KEY, DATABASE_URL (Supabase),
-#    SUPABASE_* keys and HUGGINGFACE_TOKEN (for pyannote diarization).
+git clone https://github.com/yourusername/AI-Speech-Analysis.git
+cd AI-Speech-Analysis
+```
 
-# 2. Production stack (NGINX on :80)
+### 2️⃣ Configure Environment
+```bash
+cp backend/.env.example backend/.env
+```
+
+Edit `backend/.env` and set:
+```env
+JWT_SECRET_KEY=your_secret_key_here
+HUGGINGFACE_TOKEN=your_hf_token_here
+DATABASE_URL=postgresql://user:password@localhost:5432/ablepro
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_key
+```
+
+### 3️⃣ Launch with Docker
+```bash
+# Production (NGINX on port 80)
 docker compose up -d --build
 
-# 3. Development stack (hot reload; API :8000, web :3000, flower :5555)
+# Development (hot reload, API :8000, web :3000, flower :5555)
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
-Open http://localhost (prod) or http://localhost:3000 (dev). API docs at
-`/docs` (Swagger) and `/redoc`.
+> ⚠️ **First boot takes 5-10 minutes** as models download. Subsequent starts: ~10 seconds.
+
+### 4️⃣ Access the Application
+- **Web Dashboard**: http://localhost:3000
+- **API Documentation**: http://localhost:8000/docs
+- **Demo Mode**: http://localhost:3000/demo *(no login required)*
 
 ---
 
-## Local development (without Docker)
+## 🛠️ Tech Stack
 
-**Backend**
+### Backend
+- **FastAPI** — High-performance async API framework
+- **Celery** — Distributed task queue for ML processing
+- **Redis** — Message broker + caching layer
+- **SQLAlchemy** — Database ORM with Alembic migrations
+- **Pydantic** — Data validation and settings management
+
+### ML & Audio Processing
+- **pyannote.audio** — Speaker diarization
+- **OpenAI Whisper** — Speech-to-text transcription
+- **librosa** — Audio feature extraction
+- **Parselmouth (Praat)** — Acoustic analysis (jitter, shimmer, HNR)
+- **scikit-learn** — IsolationForest, StandardScaler
+- **Hugging Face Transformers** — wav2vec2 models
+
+### Frontend
+- **Next.js 15** — React framework with App Router
+- **TypeScript** — Type-safe development
+- **Tailwind CSS** — Utility-first styling
+- **Recharts** — Data visualization
+- **Framer Motion** — Smooth animations
+- **Zustand** — State management
+
+### DevOps
+- **Docker & Docker Compose** — Containerization
+- **NGINX** — Reverse proxy and load balancing
+- **PostgreSQL** — Relational database
+- **Supabase** — BaaS for storage and auth
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── backend/                 # FastAPI application
+│   ├── app/
+│   │   ├── config/          # Pydantic settings
+│   │   ├── core/            # Security, logging, exceptions
+│   │   ├── database/        # SQLAlchemy setup
+│   │   ├── models/          # ORM models
+│   │   ├── schemas/         # Pydantic request/response models
+│   │   ├── routers/         # API endpoints
+│   │   │   ├── auth.py      # Authentication
+│   │   │   ├── upload.py    # Audio upload
+│   │   │   ├── jobs.py      # Job management
+│   │   │   ├── results.py   # Analysis results
+│   │   │   ├── reports.py   # PDF generation
+│   │   │   └── demo.py      # Public demo endpoint
+│   │   ├── services/        # Business logic
+│   │   │   └── ml/          # ML pipeline
+│   │   ├── tasks/           # Celery tasks
+│   │   └── utils/           # Helper functions
+│   ├── alembic/             # Database migrations
+│   └── tests/               # Pytest suite
+│
+├── frontend/                # Next.js application
+│   └── src/
+│       ├── app/             # App Router pages
+│       │   ├── (auth)/      # Auth pages
+│       │   ├── dashboard/   # Protected dashboard
+│       │   └── demo/        # Public demo (no auth)
+│       ├── components/      # React components
+│       │   ├── ui/          # Reusable UI components
+│       │   ├── dashboard/   # Dashboard-specific
+│       │   ├── results/     # Charts, timeline, transcript
+│       │   └── marketing/   # Landing page
+│       ├── lib/             # Utilities, API client
+│       └── hooks/           # Custom React hooks
+│
+├── models/                  # Pre-trained ML artifacts
+│   ├── atypicality_scaler.pkl
+│   ├── atypicality_iforest.pkl
+│   └── gender_age_clf.pkl
+│
+├── docker/                  # Docker configurations
+│   └── nginx/               # NGINX configs
+│
+├── docs/                    # Documentation
+│   ├── ARCHITECTURE.md      # System design
+│   └── API.md               # API reference
+│
+├── docker-compose.yml       # Production stack
+└── docker-compose.dev.yml   # Development overrides
+```
+
+---
+
+## 🔧 Local Development (No Docker)
+
+### Backend Setup
 ```bash
 cd backend
-python3.12 -m venv .venv && source .venv/bin/activate
+python3.12 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
-# System deps: ffmpeg, libsndfile  (brew install ffmpeg libsndfile)
-cp .env.example .env            # works out-of-the-box on SQLite
-uvicorn app.main:app --reload   # http://localhost:8000/docs
-# Worker (separate shell, needs Redis running):
+
+# System dependencies (macOS)
+brew install ffmpeg libsndfile
+
+# Configure and run
+cp .env.example .env
+uvicorn app.main:app --reload  # API on http://localhost:8000
+
+# Start Celery worker (separate terminal)
 celery -A app.tasks.celery_app worker --loglevel=info
 ```
 
-**Frontend**
+### Frontend Setup
 ```bash
 cd frontend
 npm install
 cp .env.local.example .env.local
-npm run dev                     # http://localhost:3000
+npm run dev  # App on http://localhost:3000
 ```
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
-All backend settings come from environment variables — see
-[`backend/.env.example`](backend/.env.example). Key ones:
+Key environment variables (see `backend/.env.example`):
 
-| Variable | Purpose |
-|----------|---------|
-| `JWT_SECRET_KEY` | Signs access/refresh tokens (**required** in prod) |
-| `DATABASE_URL` | Supabase Postgres connection string (SQLite if unset) |
-| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Storage + auth provisioning |
-| `SUPABASE_JWT_SECRET` | Validates Supabase social-login tokens |
-| `HUGGINGFACE_TOKEN` | Required to load the gated pyannote pipeline |
-| `REDIS_URL`, `CELERY_BROKER_URL`, `CELERY_RESULT_BACKEND` | Queue/cache |
-| `WHISPER_MODEL_SIZE` | `tiny`…`large-v3` (default `small`) |
-| `MAX_UPLOAD_SIZE_MB` | Upload ceiling (default 100) |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `JWT_SECRET_KEY` | Signs access/refresh tokens | ✅ Production |
+| `HUGGINGFACE_TOKEN` | Access gated pyannote models | ✅ Always |
+| `DATABASE_URL` | PostgreSQL connection string | Optional (defaults to SQLite) |
+| `SUPABASE_URL` | Supabase project URL | Optional |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase admin key | Optional |
+| `REDIS_URL` | Redis connection string | Auto-configured in Docker |
+| `WHISPER_MODEL_SIZE` | `tiny`, `small`, `medium`, `large` | Optional (default: `small`) |
+| `MAX_UPLOAD_SIZE_MB` | Upload file size limit | Optional (default: 100) |
 
 ---
 
-## Testing
+## 🧪 Testing
 
 ```bash
 cd backend
 pip install -r requirements-dev.txt
-pytest               # unit + integration + ml-artifact tests
+pytest  # Runs unit + integration tests
 ```
 
-The suite is hermetic: SQLite, local storage and a stubbed task queue — no
-external services required.
+**Test suite features**:
+- ✅ Hermetic (SQLite, local storage, stubbed tasks)
+- ✅ No external dependencies required
+- ✅ ML artifact validation included
 
 ---
 
-## Security
+## 🔒 Security Features
 
-JWT auth with refresh-token rotation (HttpOnly cookie), RBAC (admin / doctor /
-user), SlowAPI + Redis rate limiting, strict upload validation (extension,
-content-type, size, magic-byte sniff), audit trails, secure cookies, CORS
-allow-listing, and non-root containers with healthchecks. Network-exposed
-endpoints require authentication; the upload and auth endpoints are additionally
-rate-limited.
+- 🔐 **JWT Authentication** with refresh token rotation
+- 👥 **RBAC** (Admin, Doctor, User roles)
+- 🚦 **Rate Limiting** via SlowAPI + Redis
+- 🛡️ **Input Validation** (extension, MIME type, size, magic bytes)
+- 📝 **Audit Trails** for sensitive operations
+- 🔒 **Secure Storage** with signed URLs
+- 🌐 **CORS** allow-listing
+- 🐳 **Hardened Containers** (non-root, health checks)
+
+---
+
+## 🎭 Demo Mode
+
+Try the platform instantly without signup:
+
+### Features
+- 🌍 **Public access** — No authentication required
+- ⚡ **Instant loading** — Pre-computed results (< 1 second)
+- 🎯 **Full functionality** — All features visible
+- 📊 **Real data** — Actual ML pipeline output
+
+### Access
+```
+http://localhost:3000/demo
+```
+
+Perfect for hackathon judges, stakeholders, or quick demonstrations!
+
+---
+
+## 📚 Documentation
+
+- **[Architecture Guide](docs/ARCHITECTURE.md)** — System design and component interaction
+- **[API Reference](docs/API.md)** — Complete REST API documentation
+- **[API Playground](http://localhost:8000/docs)** — Interactive Swagger UI
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is proprietary software developed by AblePro Solutions.
+
+---
+
+## 🙏 Acknowledgments
+
+- **pyannote.audio** team for speaker diarization
+- **OpenAI** for Whisper ASR
+- **Hugging Face** for transformer models
+- **Praat/Parselmouth** for acoustic analysis tools
+
+---
+
+## 📞 Support
+
+For questions, issues, or feature requests:
+- 📧 Email: support@ablepro.solutions
+- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/AI-Speech-Analysis/issues)
+- 📖 Docs: [Documentation](docs/)
+
+---
+
+<div align="center">
+  <p><strong>Built with ❤️ by the AblePro Solutions Team</strong></p>
+  <p>Empowering clinical decision-making through AI-powered voice analytics</p>
+</div>
