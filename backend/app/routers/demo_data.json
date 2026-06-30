@@ -1,0 +1,233 @@
+{
+  "job_id": "demo-00000000-0000-0000-0000-000000000000",
+  "status": "completed",
+  "detected_speakers": 3,
+  "language_source": "kn",
+  "language_target": "en",
+  "processing_time_seconds": 127.5,
+  "audio": {
+    "duration_seconds": 180.3,
+    "sample_rate": 16000,
+    "channels": 1,
+    "original_filename": "Sample1C.wav"
+  },
+  "speakers": [
+    {
+      "id": "speaker-demo-001",
+      "label": "SPEAKER_01",
+      "diarization_id": "diar-001",
+      "color": "#3B82F6",
+      "total_speech_seconds": 62.4,
+      "total_pause_seconds": 12.8,
+      "segment_count": 8,
+      "word_count": 245,
+      "prediction": {
+        "gender": "male",
+        "gender_confidence": 0.87,
+        "age_group": "adult",
+        "age_confidence": 0.82,
+        "raw_class_label": "0",
+        "gender_age_source": "model",
+        "atypicality": "typical",
+        "atypicality_score": -0.15,
+        "atypicality_confidence": 0.89,
+        "features": {
+          "latency_to_speak_sec": 0.52,
+          "pause_to_speech_ratio": 0.21,
+          "pronunciation_flux_var": 0.09,
+          "f0_mean": 138.7,
+          "jitter": 0.014,
+          "shimmer": 0.048,
+          "hnr": 17.8
+        }
+      },
+      "transcriptions": [
+        {
+          "id": "trans-001-001",
+          "start_time": 2.4,
+          "end_time": 9.8,
+          "text_source": "ನಮಸ್ಕಾರ, ಇಂದು ನಾವು ಮಾನಸಿಕ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ಚರ್ಚಿಸೋಣ",
+          "text_translated": "Hello, today let's discuss mental health",
+          "confidence": 0.92
+        },
+        {
+          "id": "trans-001-002",
+          "start_time": 25.6,
+          "end_time": 34.2,
+          "text_source": "ಮಾನಸಿಕ ಆರೋಗ್ಯವು ನಮ್ম ಒಟ್ಟಾರೆ ಯೋಗಕ್ಷೇಮಕ್ಕೆ ಬಹಳ ಮುಖ್ಯವಾಗಿದೆ",
+          "text_translated": "Mental health is very important for our overall well-being",
+          "confidence": 0.88
+        },
+        {
+          "id": "trans-001-003",
+          "start_time": 58.3,
+          "end_time": 67.9,
+          "text_source": "ಒತ್ತಡ ಮತ್ತು ಆತಂಕವನ್ನು ನಿರ್ವಹಿಸುವುದು ಕಲಿಯಬೇಕಾದ ಕೌಶಲ್ಯ",
+          "text_translated": "Managing stress and anxiety is a skill that needs to be learned",
+          "confidence": 0.91
+        },
+        {
+          "id": "trans-001-004",
+          "start_time": 95.1,
+          "end_time": 103.7,
+          "text_source": "ವೃತ್ತಿಪರ ಸಹಾಯ ಪಡೆಯುವುದರಲ್ಲಿ ಯಾವುದೇ ತಪ್ಪಿಲ್ಲ",
+          "text_translated": "There is nothing wrong with seeking professional help",
+          "confidence": 0.94
+        },
+        {
+          "id": "trans-001-005",
+          "start_time": 138.4,
+          "end_time": 145.6,
+          "text_source": "ನಮ್ಮ ಸಮುದಾಯದಲ್ಲಿ ಮಾನಸಿಕ ಆರೋಗ್ಯದ ಬಗ್ಗೆ ಹೆಚ್ಚು ಮಾತನಾಡಬೇಕು",
+          "text_translated": "We need to talk more about mental health in our community",
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "id": "speaker-demo-002",
+      "label": "SPEAKER_02",
+      "diarization_id": "diar-002",
+      "color": "#10B981",
+      "total_speech_seconds": 54.8,
+      "total_pause_seconds": 18.5,
+      "segment_count": 7,
+      "word_count": 198,
+      "prediction": {
+        "gender": "female",
+        "gender_confidence": 0.91,
+        "age_group": "adult",
+        "age_confidence": 0.85,
+        "raw_class_label": "0",
+        "gender_age_source": "hf",
+        "atypicality": "atypical",
+        "atypicality_score": 0.62,
+        "atypicality_confidence": 0.78,
+        "features": {
+          "latency_to_speak_sec": 1.94,
+          "pause_to_speech_ratio": 0.45,
+          "pronunciation_flux_var": 0.28,
+          "f0_mean": 224.3,
+          "jitter": 0.031,
+          "shimmer": 0.095,
+          "hnr": 11.8
+        }
+      },
+      "transcriptions": [
+        {
+          "id": "trans-002-001",
+          "start_time": 11.2,
+          "end_time": 24.8,
+          "text_source": "ಹೌದು... ನಾನು ಇತ್ತೀಚೆಗೆ ತುಂಬಾ... ಒತ್ತಡದಲ್ಲಿದ್ದೇನೆ",
+          "text_translated": "Yes... I have been very... stressed lately",
+          "confidence": 0.84
+        },
+        {
+          "id": "trans-002-002",
+          "start_time": 35.6,
+          "end_time": 48.2,
+          "text_source": "ಕೆಲಸ ಮತ್ತು ಮನೆಯ... ಜವಾಬ್ದಾರಿಗಳನ್ನು ಸಮತೋಲನಗೊಳಿಸುವುದು ಕಷ್ಟವಾಗುತ್ತಿದೆ",
+          "text_translated": "Balancing work and home... responsibilities is becoming difficult",
+          "confidence": 0.81
+        },
+        {
+          "id": "trans-002-003",
+          "start_time": 69.4,
+          "end_time": 82.8,
+          "text_source": "ಕೆಲವೊಮ್ಮೆ... ನನಗೆ ಮಾತನಾಡಲು ಕಷ್ಟವಾಗುತ್ತದೆ ಮತ್ತು... ಮಾತುಗಳು ಸರಿಯಾಗಿ ಬರುವುದಿಲ್ಲ",
+          "text_translated": "Sometimes... I find it hard to speak and... words don't come out right",
+          "confidence": 0.79
+        },
+        {
+          "id": "trans-002-004",
+          "start_time": 105.2,
+          "end_time": 118.6,
+          "text_source": "ನನಗೆ... ಸಹಾಯ ಬೇಕಾಗಿದೆ ಎಂದು ನಾನು ಭಾವಿಸುತ್ತೇನೆ... ಆದರೆ ಹೇಗೆ ಪ್ರಾರಂಭಿಸಬೇಕು ಎಂದು ತಿಳಿದಿಲ್ಲ",
+          "text_translated": "I... think I need help... but don't know how to start",
+          "confidence": 0.86
+        },
+        {
+          "id": "trans-002-005",
+          "start_time": 147.3,
+          "end_time": 159.8,
+          "text_source": "ಈ ಸಂಭಾಷಣೆ... ತುಂಬಾ ಸಹಾಯಕವಾಗಿದೆ... ಧನ್ಯವಾದಗಳು",
+          "text_translated": "This conversation... is very helpful... thank you",
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "id": "speaker-demo-003",
+      "label": "SPEAKER_03",
+      "diarization_id": "diar-003",
+      "color": "#F59E0B",
+      "total_speech_seconds": 48.2,
+      "total_pause_seconds": 9.7,
+      "segment_count": 6,
+      "word_count": 176,
+      "prediction": {
+        "gender": "male",
+        "gender_confidence": 0.84,
+        "age_group": "senior",
+        "age_confidence": 0.79,
+        "raw_class_label": "0",
+        "gender_age_source": "model",
+        "atypicality": "typical",
+        "atypicality_score": -0.22,
+        "atypicality_confidence": 0.86,
+        "features": {
+          "latency_to_speak_sec": 0.48,
+          "pause_to_speech_ratio": 0.19,
+          "pronunciation_flux_var": 0.11,
+          "f0_mean": 125.4,
+          "jitter": 0.016,
+          "shimmer": 0.053,
+          "hnr": 16.2
+        }
+      },
+      "transcriptions": [
+        {
+          "id": "trans-003-001",
+          "start_time": 10.1,
+          "end_time": 17.6,
+          "text_source": "ನಿಮ್ಮ ಭಾವನೆಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳುವುದು ಸಾಹಸದ ಕಾರ್ಯ",
+          "text_translated": "Sharing your feelings is a courageous act",
+          "confidence": 0.93
+        },
+        {
+          "id": "trans-003-002",
+          "start_time": 49.8,
+          "end_time": 57.4,
+          "text_source": "ನನ್ನ ಅನುಭವದಲ್ಲಿ, ಮಾತನಾಡುವುದು ಮೊದಲ ಹೆಜ್ಜೆ",
+          "text_translated": "In my experience, talking is the first step",
+          "confidence": 0.91
+        },
+        {
+          "id": "trans-003-003",
+          "start_time": 84.2,
+          "end_time": 94.3,
+          "text_source": "ವೃತ್ತಿಪರರು ನಿಮಗೆ ಸರಿಯಾದ ಮಾರ್ಗದರ್ಶನ ನೀಡಬಹುದು",
+          "text_translated": "Professionals can give you the right guidance",
+          "confidence": 0.89
+        },
+        {
+          "id": "trans-003-004",
+          "start_time": 120.4,
+          "end_time": 137.2,
+          "text_source": "ಧ್ಯಾನ ಮತ್ತು ಯೋಗವು ಸಹ ಮಾನಸಿಕ ಆರೋಗ್ಯಕ್ಕೆ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿದೆ",
+          "text_translated": "Meditation and yoga are also very useful for mental health",
+          "confidence": 0.92
+        },
+        {
+          "id": "trans-003-005",
+          "start_time": 161.5,
+          "end_time": 175.8,
+          "text_source": "ನಿಮಗೆ ಸರಿಯಾದ ಬೆಂಬಲ ಸಿಗುತ್ತದೆ ಎಂದು ನನಗೆ ವಿಶ್ವಾಸವಿದೆ",
+          "text_translated": "I am confident you will find the right support",
+          "confidence": 0.90
+        }
+      ]
+    }
+  ],
+  "has_report": true
+}
