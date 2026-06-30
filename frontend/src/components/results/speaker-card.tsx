@@ -27,13 +27,13 @@ export function SpeakerCard({ speaker, index }: { speaker: SpeakerRead; index: n
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <div
-              className="flex h-11 w-11 items-center justify-center rounded-xl text-base font-bold text-white shadow-sm"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white shadow-sm"
               style={{ background: color }}
             >
-              {speaker.label}
+              {speaker.label.replace(/[^0-9]/g, "")}
             </div>
             <div>
-              <p className="font-semibold leading-tight">Speaker {speaker.label}</p>
+              <p className="font-semibold leading-tight">Speaker {speaker.label.replace(/[^0-9]/g, "")}</p>
               <p className="text-xs text-muted-foreground">
                 {speaker.segment_count} segments · {speaker.word_count} words
               </p>
