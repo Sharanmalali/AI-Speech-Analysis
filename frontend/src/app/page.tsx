@@ -179,6 +179,11 @@ export default function LandingPage() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
+                <Link href="/dashboard/demo">
+                  <Sparkles className="h-4 w-4" /> Try Demo
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
                 <Link href="/login">Sign in</Link>
               </Button>
             </motion.div>
@@ -335,10 +340,15 @@ export default function LandingPage() {
               <p className="mx-auto mt-4 max-w-xl text-white/85">
                 Create an account and run your first multi-speaker analysis in minutes.
               </p>
-              <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Button asChild size="xl" className="bg-white text-primary hover:bg-white/90">
                   <Link href="/register">
                     Get started free <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild size="xl" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
+                  <Link href="/dashboard/demo">
+                    <Sparkles className="h-4 w-4" /> Try Demo
                   </Link>
                 </Button>
               </div>

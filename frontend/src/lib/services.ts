@@ -106,3 +106,11 @@ export const reportService = {
     return data as Blob;
   },
 };
+
+// --- Demo ------------------------------------------------------------------
+export const demoService = {
+  async getSampleResult(): Promise<ResultResponse> {
+    const { data } = await api.get<ResultResponse>("/demo/sample-result");
+    return data;
+  },
+};

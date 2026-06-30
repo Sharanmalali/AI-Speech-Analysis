@@ -109,7 +109,7 @@ def _register_api_routers(app: FastAPI) -> None:
     the others from loading.
     """
     prefix = settings.API_V1_PREFIX
-    for module_name in ("auth", "upload", "jobs", "results", "reports", "admin"):
+    for module_name in ("auth", "upload", "jobs", "results", "reports", "admin", "demo"):
         try:
             module = __import__(f"app.routers.{module_name}", fromlist=["router"])
             app.include_router(module.router, prefix=prefix)
