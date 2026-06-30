@@ -107,6 +107,12 @@ High-resolution frequency-domain representations showing phonetic patterns, paus
   <p><i>Visual representation of vocal cord vibrations and acoustic biomarkers</i></p>
 </div>
 
+## 🎥 Demo Video
+
+Watch the complete project demonstration here:
+
+[![Watch the Demo](https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link)
+
 ### Dashboard Insights
 The frontend translates complex ML outputs into intuitive visualizations:
 - 📈 **Speaking time distribution** (pie charts)
