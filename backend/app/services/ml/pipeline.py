@@ -22,7 +22,6 @@ from app.core.exceptions import PipelineError
 from app.core.logging import get_logger
 from app.models.enums import JobStage
 from app.services.ml.atypicality_classifier import get_atypicality_classifier
-from app.services.ml.clinical_narrative import get_clinical_narrative_generator
 from app.services.ml.feature_extraction import extract_features
 from app.services.ml.gender_age_classifier import get_gender_age_classifier
 from app.services.ml.hf_gender_age import get_hf_gender_age_classifier
@@ -97,7 +96,6 @@ class AudioAnalysisPipeline:
         self._atypicality = get_atypicality_classifier()
         self._llm_gender_age = get_llm_gender_age_classifier()
         self._hf_gender_age = get_hf_gender_age_classifier()
-        self._narrative_generator = get_clinical_narrative_generator()
 
     def _emit(self, stage: JobStage, pct: float) -> None:
         if self._progress is not None:
@@ -237,16 +235,6 @@ class AudioAnalysisPipeline:
             self._emit(JobStage.ATYPICALITY_CLASSIFICATION, base_pct + 20.0 / n)
             atypicality = self._atypicality.predict(features)
 
-            # Generate clinical narrative (optional, non-fatal if it fails)
-            clinical_narrative = None
-            if self._narrative_generator.is_available:
-                try:
-                    clinical_narrative = self._narrative_generator.generate(
-                        features, gender_age, atypicality
-                    )
-                except Exception as exc:  # noqa: BLE001
-                    logger.warning("clinical_narrative_generation_failed", error=str(exc))
-
             speakers.append(
                 SpeakerResult(
                     label=_label_for_index(idx),
@@ -260,7 +248,6 @@ class AudioAnalysisPipeline:
                     features=features,
                     gender_age=gender_age,
                     atypicality=atypicality,
-                    clinical_narrative=clinical_narrative,
                 )
             )
 
