@@ -111,7 +111,7 @@ High-resolution frequency-domain representations showing phonetic patterns, paus
 
 Watch the complete project demonstration here:
 
-[![Watch the Demo](https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link)
+[![Watch the Demo](https://img.shields.io/badge/Watch-Demo%20Video-red?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link)
 
 ### Dashboard Insights
 The frontend translates complex ML outputs into intuitive visualizations:
