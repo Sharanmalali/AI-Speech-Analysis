@@ -406,11 +406,6 @@ Contributions are welcome! Please follow these guidelines:
 
 ---
 
-## 📄 License
-
-This project is proprietary software developed by AblePro Solutions.
-
----
 
 ## 🙏 Acknowledgments
 
@@ -421,11 +416,8 @@ This project is proprietary software developed by AblePro Solutions.
 
 ---
 
-## 📞 Support
+##  Support
 
-For questions, issues, or feature requests:
-- 📧 Email: support@ablepro.solutions
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/AI-Speech-Analysis/issues)
 - 📖 Docs: [Documentation](docs/)
 
 ---
