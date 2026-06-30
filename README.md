@@ -96,7 +96,7 @@ AblePro uses a hybrid, 3-stage ML pipeline that balances performance, interpreta
 High-resolution frequency-domain representations showing phonetic patterns, pauses, and vocal intensity:
 
 <div align="center">
-  <img src="resouces/spectogram1.png" alt="Spectrogram Example 1" width="400"/>
+  <img src="resources/spectogram1.png" alt="Spectrogram Example 1" width="400"/>
   <img src="resources/spectogram2.png" alt="Spectrogram Example 2" width="400"/>
   <p><i>Magma-mapped spectrograms revealing frequency distribution over time</i></p>
 </div>
