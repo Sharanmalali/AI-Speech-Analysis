@@ -28,6 +28,13 @@ AblePro is a comprehensive voice diagnostic and demographic analysis system that
 - 📄 **Clinical PDF Reports** — Professional, downloadable diagnostic summaries
 
 ---
+## 🎥 Demo Videos
+
+- **📌 Full Project Walkthrough:**  
+  https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link
+
+- **🧠 ML Model Working:**  
+  https://drive.google.com/file/d/1f8J3FUyhAcTKho-Zz1fCN0dFj4yjYeBB/view?usp=drive_link
 
 ## 🎯 Key Features
 
@@ -107,13 +114,6 @@ High-resolution frequency-domain representations showing phonetic patterns, paus
   <p><i>Visual representation of vocal cord vibrations and acoustic biomarkers</i></p>
 </div>
 
-## 🎥 Demo Videos
-
-- **📌 Full Project Walkthrough:**  
-  https://drive.google.com/file/d/1_A6MIu-8MsdVj5JagKJeLnhBrNlc2Noq/view?usp=drive_link
-
-- **🧠 ML Model Working:**  
-  https://drive.google.com/file/d/1f8J3FUyhAcTKho-Zz1fCN0dFj4yjYeBB/view?usp=drive_link
 
 ### Dashboard Insights
 The frontend translates complex ML outputs into intuitive visualizations:
